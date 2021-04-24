@@ -5,6 +5,7 @@
   "main": "handlers/hello-world.js",
   "scripts": {
     "format": "prettier --write . && terraform fmt",
+    "deploy": "./scripts/zip-handlers.sh && terraform apply",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
