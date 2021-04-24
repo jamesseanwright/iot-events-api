@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  hello-world:
+    build: ./handlers/hello-world
+    ports:
+      - 9000:8080
