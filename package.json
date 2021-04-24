@@ -1,0 +1,34 @@
+{
+  "name": "terraform-lambda-atlas",
+  "version": "0.0.1",
+  "description": "A HTTP API for storing and retrieving IoT device events, built with Terraform, AWS Lambda, and MongoDB Atlas",
+  "main": "hello-world.js",
+  "scripts": {
+    "format": "npx prettier --write . && terraform fmt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesseanwright/terraform-lambda-atlas.git"
+  },
+  "keywords": [
+    "iot",
+    "events",
+    "aws",
+    "lambda",
+    "api-gateway",
+    "terraform",
+    "mongodb",
+    "atlas",
+    "cloud-native"
+  ],
+  "author": "James Wright <hi@james.engineering>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jamesseanwright/terraform-lambda-atlas/issues"
+  },
+  "homepage": "https://github.com/jamesseanwright/terraform-lambda-atlas#readme",
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}
