@@ -14,6 +14,18 @@ provider "aws" {
   region  = "eu-west-1"
 }
 
+resource "aws_ecr_repository" "hello_world_lambda_repo" {
+  name = "hello-world"
+
+  provisioner "local-exec" {
+    command = "docker build -t ${self.repository_url} handlers/hello-world"
+  }
+
+  provisioner "local-exec" {
+    command = "docker push ${self.repository_url}"
+  }
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
 
@@ -34,10 +46,10 @@ EOF
 }
 
 resource "aws_lambda_function" "hello_world" {
-  filename         = "deployment/hello-world.zip"
-  function_name    = "hello_world"
-  handler          = "index.handler"
-  runtime          = "nodejs14.x"
-  role             = aws_iam_role.iam_for_lambda.arn
-  source_code_hash = filebase64sha256("deployment/hello-world.zip")
+  function_name = "hello_world"
+  package_type  = "Image"
+  image_uri     = "${aws_ecr_repository.hello_world_lambda_repo.repository_url}:latest"
+  handler       = "index.handler"
+  runtime       = "nodejs14.x"
+  role          = aws_iam_role.iam_for_lambda.arn
 }
