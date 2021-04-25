@@ -28,17 +28,16 @@ const createRes = (statusCode, message) => ({
 });
 
 // TODO: lambda layer
-const asUUID = value => new Binary(
-  Buffer.from(value),
-  Binary.SUBTYPE_UUID,
-)
+const asUUID = (value) => new Binary(Buffer.from(value), Binary.SUBTYPE_UUID);
 
 exports.handler = async ({ body }) => {
   const connection = await getDBConnection();
   const { date, deviceID, eventType } = JSON.parse(body);
 
   try {
-    const { result: { ok } } = await connection
+    const {
+      result: { ok },
+    } = await connection
       .db('events')
       .collection('events')
       .insertOne({

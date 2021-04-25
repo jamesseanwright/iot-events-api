@@ -32,10 +32,14 @@ exports.handler = async () => {
     const events = await connection
       .db('events')
       .collection('events')
-      .find({}, { // TODO: create index
-        limit: 10,
-        sort: [['date', -1]],
-      })
+      .find(
+        {},
+        {
+          // TODO: create index
+          limit: 10,
+          sort: [['date', -1]],
+        },
+      )
       .toArray();
 
     return createRes(200, events);
