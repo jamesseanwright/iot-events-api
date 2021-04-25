@@ -35,7 +35,6 @@ exports.handler = async () => {
       .find(
         {},
         {
-          // TODO: create index
           limit: 10,
           sort: [['date', -1]],
         },
