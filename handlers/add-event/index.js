@@ -1,6 +1,6 @@
 'use strict';
 
-const { Binary, MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const { MONGODB_URI } = process.env;
 
 let conn;
@@ -27,9 +27,6 @@ const createRes = (statusCode, message) => ({
   body: JSON.stringify({ message }),
 });
 
-// TODO: lambda layer
-const asUUID = (value) => new Binary(Buffer.from(value), Binary.SUBTYPE_UUID);
-
 exports.handler = async ({ body }) => {
   const connection = await getDBConnection();
   const { date, deviceID, eventType } = JSON.parse(body);
@@ -42,7 +39,7 @@ exports.handler = async ({ body }) => {
       .collection('events')
       .insertOne({
         date: new Date(date),
-        deviceID: asUUID(deviceID),
+        deviceID,
         eventType,
       });
 
