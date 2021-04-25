@@ -30,5 +30,6 @@
   "homepage": "https://github.com/jamesseanwright/terraform-lambda-atlas#readme",
   "devDependencies": {
     "prettier": "2.2.1"
-  }
+  },
+  "dependencies": {}
 }
