@@ -9,5 +9,13 @@ services:
       MONGODB_URI: mongodb://db:27017
     depends_on:
       - db
+  add-event:
+    build: ./handlers/add-event
+    ports:
+      - 9001:8080
+    environment:
+      MONGODB_URI: mongodb://db:27017
+    depends_on:
+      - db
   db:
     image: mongo:4.4.5
