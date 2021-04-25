@@ -18,13 +18,13 @@ const getDBConnection = async () => {
 };
 
 // TODO: lambda layer
-const createRes = (statusCode, body) => ({
+const createRes = (statusCode, message) => ({
   statusCode,
   headers: {
     'Content-Type': 'application/json',
   },
   isBase64Encoded: false,
-  body: JSON.stringify(body),
+  body: JSON.stringify({ message }),
 });
 
 // TODO: lambda layer
@@ -38,7 +38,7 @@ exports.handler = async ({ body }) => {
   const { date, deviceID, eventType } = JSON.parse(body);
 
   try {
-    const events = await connection
+    const { result: { ok } } = await connection
       .db('events')
       .collection('events')
       .insertOne({
@@ -47,10 +47,10 @@ exports.handler = async ({ body }) => {
         eventType,
       });
 
-    return createRes(200, events);
+    return ok
+      ? createRes(201, 'Created event')
+      : createRes(500, 'Unable to create event');
   } catch ({ message }) {
-    return createRes(500, {
-      message,
-    });
+    return createRes(500, message);
   }
 };
