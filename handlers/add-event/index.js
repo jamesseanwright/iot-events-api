@@ -1,6 +1,6 @@
 'use strict';
 
-const { Binary, MongoClient, BSONType } = require('mongodb');
+const { Binary, MongoClient } = require('mongodb');
 const { MONGODB_URI } = process.env;
 
 let conn;

@@ -19,3 +19,7 @@ services:
       - db
   db:
     image: mongo:4.4.5
+    environment:
+      MONGO_INITDB_DATABASE: events
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
