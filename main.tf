@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.37.0"
     }
+
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = "~> 0.9.0"
+    }
   }
 
   required_version = "~> 0.15.0"
@@ -11,7 +16,27 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "eu-west-1"
+  region  = var.region
+}
+
+provider "mongodbatlas" {
+  # The public and private keys are configured via the
+  # MONGODB_ATLAS_PUBLIC_KEY and MONGODB_ATLAS_PRIVATE_KEY
+  # environment variables respectively
+}
+
+resource "mongodbatlas_project" "iot_events" {
+  name   = "iot-events"
+  org_id = var.atlas_org_id
+}
+
+resource "mongodbatlas_cluster" "events" {
+  project_id                  = mongodbatlas_project.iot_events.id
+  name                        = "events"
+  provider_name               = "AWS"
+  provider_region_name        = upper(replace(var.region, "-", "_"))
+  cluster_type                = "REPLICASET"
+  provider_instance_size_name = "M10"
 }
 
 module "add_event_lambda" {
