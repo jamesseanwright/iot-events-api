@@ -15,13 +15,13 @@ provider "aws" {
 }
 
 module "add_event_lambda" {
-  source = "./tf-modules/ecr-lambda"
-  repo_name = "add-event"
+  source        = "./tf-modules/ecr-lambda"
+  repo_name     = "add-event"
   function_name = "add_event"
 }
 
 module "list_recent_events_lambda" {
-  source = "./tf-modules/ecr-lambda"
-  repo_name = "list-recent-events"
+  source        = "./tf-modules/ecr-lambda"
+  repo_name     = "list-recent-events"
   function_name = "list_recent_events"
 }
