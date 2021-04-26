@@ -34,7 +34,7 @@ resource "mongodbatlas_cluster" "events" {
   project_id                  = mongodbatlas_project.iot_events.id
   name                        = "events"
   provider_name               = "AWS"
-  provider_region_name        = upper(replace(var.region, "-", "_"))
+  provider_region_name        = upper(replace(var.region, "-", "_")) # e.g. eu-west-1 => EU_WEST_1
   cluster_type                = "REPLICASET"
   provider_instance_size_name = "M10"
 }
