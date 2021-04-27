@@ -58,6 +58,12 @@ resource "aws_lambda_function" "lambda_function" {
   image_uri     = "${aws_ecr_repository.lambda_repo.repository_url}:latest"
   role          = aws_iam_role.lambda_role.arn
 
+  environment {
+    variables = {
+      MONGODB_URI = var.db_connection_string
+    }
+  }
+
   vpc_config {
     subnet_ids = var.subnet_ids
     security_group_ids = [var.security_group_id]

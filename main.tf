@@ -42,6 +42,7 @@ module "add_event_lambda" {
   function_name     = "add_event"
   subnet_ids        = module.vpc.subnet_ids
   security_group_id = module.vpc.security_group_id
+  db_connection_string = mongodbatlas_cluster.events.connection_strings[0].private_endpoint[0].srv_connection_string
 }
 
 module "list_recent_events_lambda" {
@@ -50,6 +51,7 @@ module "list_recent_events_lambda" {
   function_name     = "list_recent_events"
   subnet_ids        = module.vpc.subnet_ids
   security_group_id = module.vpc.security_group_id
+  db_connection_string = mongodbatlas_cluster.events.connection_strings[0].private_endpoint[0].srv_connection_string
 }
 
 resource "mongodbatlas_project" "iot_events" {
@@ -70,6 +72,8 @@ resource "random_password" "events_user_password" {
   length = 16
 }
 
+# TODO: is our user needed if we're connecting
+# with our private endpoint-aware string?
 resource "mongodbatlas_database_user" "user" {
   username           = "events-user"
   password           = random_password.events_user_password.result

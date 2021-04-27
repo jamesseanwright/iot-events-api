@@ -17,3 +17,8 @@ variable "security_group_id" {
   description = "The VPC default security group ID for the lambda"
   type = string
 }
+
+variable "db_connection_string" {
+  description = "The MongoDB connection string the lambda will use to connect to Atlas"
+  type = string
+}
