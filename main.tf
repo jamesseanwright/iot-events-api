@@ -25,6 +25,10 @@ provider "mongodbatlas" {
   # environment variables respectively
 }
 
+module "vpc" {
+  source = "./tf-modules/vpc"
+}
+
 module "add_event_lambda" {
   source        = "./tf-modules/ecr-lambda"
   repo_name     = "add-event"
@@ -35,10 +39,6 @@ module "list_recent_events_lambda" {
   source        = "./tf-modules/ecr-lambda"
   repo_name     = "list-recent-events"
   function_name = "list_recent_events"
-}
-
-module "vpc" {
-  source = "./tf-modules/vpc"
 }
 
 resource "mongodbatlas_project" "iot_events" {
