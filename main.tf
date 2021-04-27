@@ -61,5 +61,13 @@ resource "mongodbatlas_privatelink_endpoint" "private_endpoint" {
   region        = var.region
 }
 
+resource "aws_vpc_endpoint" "iot_vpc_endpoint" {
+  vpc_id             = module.vpc.vpc_id
+  service_name       = mongodbatlas_privatelink_endpoint.private_endpoint.endpoint_service_name
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.subnet_ids
+  security_group_ids = [module.vpc.security_group_id]
+}
+
 # TODO: there isn't a TF resource to create indexes against clusters, so
 # we'll need to call the Atlas index HTTP API endpoint here
