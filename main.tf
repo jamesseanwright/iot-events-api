@@ -37,20 +37,20 @@ module "vpc" {
 }
 
 module "add_event_lambda" {
-  source            = "./tf-modules/ecr-lambda"
-  repo_name         = "add-event"
-  function_name     = "add_event"
-  subnet_ids        = module.vpc.subnet_ids
-  security_group_id = module.vpc.security_group_id
+  source               = "./tf-modules/ecr-lambda"
+  repo_name            = "add-event"
+  function_name        = "add_event"
+  subnet_ids           = module.vpc.subnet_ids
+  security_group_id    = module.vpc.security_group_id
   db_connection_string = mongodbatlas_cluster.events.connection_strings[0].private_endpoint[0].srv_connection_string
 }
 
 module "list_recent_events_lambda" {
-  source            = "./tf-modules/ecr-lambda"
-  repo_name         = "list-recent-events"
-  function_name     = "list_recent_events"
-  subnet_ids        = module.vpc.subnet_ids
-  security_group_id = module.vpc.security_group_id
+  source               = "./tf-modules/ecr-lambda"
+  repo_name            = "list-recent-events"
+  function_name        = "list_recent_events"
+  subnet_ids           = module.vpc.subnet_ids
+  security_group_id    = module.vpc.security_group_id
   db_connection_string = mongodbatlas_cluster.events.connection_strings[0].private_endpoint[0].srv_connection_string
 }
 
