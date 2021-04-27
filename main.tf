@@ -37,6 +37,10 @@ module "list_recent_events_lambda" {
   function_name = "list_recent_events"
 }
 
+module "vpc" {
+  source = "./tf-modules/vpc"
+}
+
 resource "mongodbatlas_project" "iot_events" {
   name   = "iot-events"
   org_id = var.atlas_org_id

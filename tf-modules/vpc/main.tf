@@ -35,3 +35,15 @@ resource "aws_subnet" "subnet_c" {
     Name = "iot-events-subnet-c"
   }
 }
+
+resource "aws_security_group" "security_group" {
+  # Given that we're communicating between lambda
+  # and our Atlas endpoint via our VPC endpoint,
+  # we have no rules to configure right now.
+  # However, a security group is nonetheless
+  # required to create said VPC endpoint.
+
+  vpc_id = aws_vpc.iot_events.id
+  name = "iot-events-default-security-group"
+  description = "The default security group for the IoT events VPC"
+}
