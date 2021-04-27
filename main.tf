@@ -9,6 +9,11 @@ terraform {
       source  = "mongodb/mongodbatlas"
       version = "~> 0.9.0"
     }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1.0"
+    }
   }
 
   required_version = "~> 0.15.0"
@@ -24,6 +29,8 @@ provider "mongodbatlas" {
   # MONGODB_ATLAS_PUBLIC_KEY and MONGODB_ATLAS_PRIVATE_KEY
   # environment variables respectively
 }
+
+provider "random" {}
 
 module "vpc" {
   source = "./tf-modules/vpc"
@@ -59,6 +66,32 @@ resource "mongodbatlas_cluster" "events" {
   provider_instance_size_name = "M10"
 }
 
+resource "random_password" "events_user_password" {
+  length = 16
+}
+
+resource "mongodbatlas_database_user" "user" {
+  username           = "events-user"
+  password           = random_password.events_user_password.result
+  project_id         = mongodbatlas_project.iot_events.id
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = "events"
+  }
+
+  roles {
+    role_name     = "readAnyDatabase"
+    database_name = "admin"
+  }
+
+  scopes {
+    name = "events"
+    type = "CLUSTER"
+  }
+}
+
 resource "mongodbatlas_privatelink_endpoint" "private_endpoint" {
   project_id    = mongodbatlas_project.iot_events.id
   provider_name = "AWS"
@@ -74,9 +107,9 @@ resource "aws_vpc_endpoint" "iot_vpc_endpoint" {
 }
 
 resource "mongodbatlas_privatelink_endpoint_service" "iot_vpc_endpoint_svc" {
-  provider_name = "AWS"
-  project_id = mongodbatlas_project.iot_events.id
-  private_link_id = mongodbatlas_privatelink_endpoint.private_endpoint.private_link_id
+  provider_name       = "AWS"
+  project_id          = mongodbatlas_project.iot_events.id
+  private_link_id     = mongodbatlas_privatelink_endpoint.private_endpoint.private_link_id
   endpoint_service_id = aws_vpc_endpoint.iot_vpc_endpoint.id
 }
 
