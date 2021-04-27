@@ -40,9 +40,9 @@ resource "mongodbatlas_cluster" "events" {
 }
 
 resource "mongodbatlas_privatelink_endpoint" "private_endpoint" {
-  project_id = mongodbatlas_project.iot_events.id
+  project_id    = mongodbatlas_project.iot_events.id
   provider_name = "AWS"
-  region = var.region
+  region        = var.region
 }
 
 # TODO: there isn't a TF resource to create indexes against clusters, so
