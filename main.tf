@@ -39,6 +39,15 @@ resource "mongodbatlas_cluster" "events" {
   provider_instance_size_name = "M10"
 }
 
+resource "mongodbatlas_privatelink_endpoint" "private_endpoint" {
+  project_id = mongodbatlas_project.iot_events.id
+  provider_name = "AWS"
+  region = var.region
+}
+
+# TODO: there isn't a TF resource to create indexes against clusters, so
+# we'll need to call the Atlas index HTTP API endpoint here
+
 module "add_event_lambda" {
   source        = "./tf-modules/ecr-lambda"
   repo_name     = "add-event"
