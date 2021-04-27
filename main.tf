@@ -25,6 +25,18 @@ provider "mongodbatlas" {
   # environment variables respectively
 }
 
+module "add_event_lambda" {
+  source        = "./tf-modules/ecr-lambda"
+  repo_name     = "add-event"
+  function_name = "add_event"
+}
+
+module "list_recent_events_lambda" {
+  source        = "./tf-modules/ecr-lambda"
+  repo_name     = "list-recent-events"
+  function_name = "list_recent_events"
+}
+
 resource "mongodbatlas_project" "iot_events" {
   name   = "iot-events"
   org_id = var.atlas_org_id
@@ -47,15 +59,3 @@ resource "mongodbatlas_privatelink_endpoint" "private_endpoint" {
 
 # TODO: there isn't a TF resource to create indexes against clusters, so
 # we'll need to call the Atlas index HTTP API endpoint here
-
-module "add_event_lambda" {
-  source        = "./tf-modules/ecr-lambda"
-  repo_name     = "add-event"
-  function_name = "add_event"
-}
-
-module "list_recent_events_lambda" {
-  source        = "./tf-modules/ecr-lambda"
-  repo_name     = "list-recent-events"
-  function_name = "list_recent_events"
-}
