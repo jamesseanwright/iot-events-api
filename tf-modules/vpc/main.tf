@@ -46,4 +46,12 @@ resource "aws_security_group" "security_group" {
   vpc_id = aws_vpc.iot_events.id
   name = "iot-events-default-security-group"
   description = "The default security group for the IoT events VPC"
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 }
