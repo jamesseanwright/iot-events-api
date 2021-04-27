@@ -30,15 +30,19 @@ module "vpc" {
 }
 
 module "add_event_lambda" {
-  source        = "./tf-modules/ecr-lambda"
-  repo_name     = "add-event"
-  function_name = "add_event"
+  source            = "./tf-modules/ecr-lambda"
+  repo_name         = "add-event"
+  function_name     = "add_event"
+  subnet_ids        = module.vpc.subnet_ids
+  security_group_id = module.vpc.security_group_id
 }
 
 module "list_recent_events_lambda" {
-  source        = "./tf-modules/ecr-lambda"
-  repo_name     = "list-recent-events"
-  function_name = "list_recent_events"
+  source            = "./tf-modules/ecr-lambda"
+  repo_name         = "list-recent-events"
+  function_name     = "list_recent_events"
+  subnet_ids        = module.vpc.subnet_ids
+  security_group_id = module.vpc.security_group_id
 }
 
 resource "mongodbatlas_project" "iot_events" {
