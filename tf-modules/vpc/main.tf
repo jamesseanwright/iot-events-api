@@ -9,7 +9,7 @@ resource "aws_vpc" "iot_events" {
 resource "aws_subnet" "subnet_a" {
   vpc_id = aws_vpc.iot_events.id
   cidr_block = "10.0.0.0/24"
-  availability_zone = "eu-west-1a"
+  availability_zone = "eu-west-1a" # TODO: compute from region
 
   tags = {
     Name = "iot-events-subnet-a"
