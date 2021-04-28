@@ -66,7 +66,7 @@ resource "aws_lambda_function" "lambda_function" {
     variables = {
       MONGODB_URI = var.db_connection_string
       MONGODB_USER = var.db_username
-      MONGODB_PASSWORD = var.db_password
+      MONGODB_PASSWORD = var.db_password # TODO: place in secrets manager instead
     }
   }
 
