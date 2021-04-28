@@ -66,3 +66,11 @@ resource "aws_lambda_function" "lambda_function" {
     security_group_ids = [var.security_group_id]
   }
 }
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id = "AllowExecutionFromAPIGateway"
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_function.function_name
+  principal = "apigateway.amazonaws.com"
+  source_arn = "${var.source_arn}/*/*/events" # /$stage/$method/events
+}

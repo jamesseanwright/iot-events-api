@@ -8,6 +8,11 @@ variable "function_name" {
   type = string
 }
 
+variable "source_arn" {
+  description = "The execution ARN of the resource that will invoke the lambda"
+  type = string
+}
+
 variable "subnet_ids" {
   description = "The VPC subnet IDs to which the lambda should attach"
   type = list(string)
@@ -27,7 +32,6 @@ variable "db_username" {
   description = "The username of the account with which to access the database"
   type = string
 }
-
 
 variable "db_password" {
   description = "The password of the account with which to access the database"
