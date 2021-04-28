@@ -37,11 +37,11 @@ module "vpc" {
 }
 
 module "atlas" {
-  source = "./tf-modules/atlas"
-  region = var.region
-  atlas_org_id = var.atlas_org_id
-  vpc_id = module.vpc.id
-  subnet_ids = module.vpc.subnet_ids
+  source            = "./tf-modules/atlas"
+  region            = var.region
+  atlas_org_id      = var.atlas_org_id
+  vpc_id            = module.vpc.id
+  subnet_ids        = module.vpc.subnet_ids
   security_group_id = module.vpc.security_group_id
 }
 
