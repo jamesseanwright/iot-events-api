@@ -1,4 +1,4 @@
-output "vpc_id" {
+output "id" {
   value = aws_vpc.iot_events.id
   description = "The ID of our IoT events VPC"
 }
