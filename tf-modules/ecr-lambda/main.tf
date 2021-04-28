@@ -1,6 +1,7 @@
 resource "aws_iam_role" "lambda_role" {
   name = "${var.function_name}_iam_role"
 
+# TODO: use json() helper or policy resource
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
