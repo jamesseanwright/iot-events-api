@@ -44,6 +44,9 @@ EOF
 resource "aws_ecr_repository" "lambda_repo" {
   name = var.repo_name
 
+  # TODO: these provisioners will only run when the
+  # repo is created for the first time. Find a better
+  # way to build and push containers as code changes.
   provisioner "local-exec" {
     command = "docker build -t ${self.repository_url} handlers/${var.repo_name}"
   }
@@ -62,6 +65,8 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = {
       MONGODB_URI = var.db_connection_string
+      MONGODB_USER = var.db_username
+      MONGODB_PASSWORD = var.db_password
     }
   }
 

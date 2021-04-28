@@ -52,6 +52,8 @@ module "add_event_lambda" {
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.security_group_id
   db_connection_string = module.atlas.connection_string
+  db_username          = module.atlas.username
+  db_password          = module.atlas.password
 }
 
 module "list_recent_events_lambda" {
@@ -61,4 +63,6 @@ module "list_recent_events_lambda" {
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.security_group_id
   db_connection_string = module.atlas.connection_string
+  db_username          = module.atlas.username
+  db_password          = module.atlas.password
 }

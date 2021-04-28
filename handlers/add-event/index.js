@@ -1,7 +1,7 @@
 'use strict';
 
 const { MongoClient } = require('mongodb');
-const { MONGODB_URI } = process.env;
+const { MONGODB_URI, MONGODB_USER, MONGODB_PASSWORD } = process.env;
 
 let conn;
 
@@ -11,6 +11,10 @@ const getDBConnection = async () => {
     conn = await MongoClient.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      auth: {
+        user: MONGODB_USER,
+        password: MONGODB_PASSWORD,
+      },
     });
   }
 

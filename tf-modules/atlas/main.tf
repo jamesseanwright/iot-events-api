@@ -6,6 +6,10 @@ terraform {
   }
 }
 
+locals {
+  database_username = "events-user"
+}
+
 resource "mongodbatlas_project" "iot_events" {
   name   = "iot-events"
   org_id = var.atlas_org_id
@@ -24,10 +28,8 @@ resource "random_password" "events_user_password" {
   length = 16
 }
 
-# TODO: is our user needed if we're connecting
-# with our private endpoint-aware string?
 resource "mongodbatlas_database_user" "user" {
-  username           = "events-user"
+  username           = local.database_username
   password           = random_password.events_user_password.result
   project_id         = mongodbatlas_project.iot_events.id
   auth_database_name = "admin"
