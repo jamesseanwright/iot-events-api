@@ -141,6 +141,26 @@ resource "aws_api_gateway_stage" "production" {
   stage_name    = "production"
 }
 
+resource "aws_api_gateway_usage_plan" "usage_plan" {
+  name = "usage-plan"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.api.id
+    stage  = aws_api_gateway_stage.production.stage_name
+  }
+}
+
+resource "aws_api_gateway_api_key" "key" {
+  name  = "api-key"
+  value = var.api_key
+}
+
+resource "aws_api_gateway_usage_plan_key" "plan_key" {
+  key_id        = aws_api_gateway_api_key.key.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.usage_plan.id
+}
+
 resource "aws_api_gateway_resource" "events" {
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   rest_api_id = aws_api_gateway_rest_api.api.id
@@ -148,17 +168,19 @@ resource "aws_api_gateway_resource" "events" {
 }
 
 resource "aws_api_gateway_method" "get" {
-  resource_id   = aws_api_gateway_resource.events.id
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  authorization = "NONE" # TODO: API key
-  http_method   = "GET"
+  resource_id      = aws_api_gateway_resource.events.id
+  rest_api_id      = aws_api_gateway_rest_api.api.id
+  authorization    = "NONE"
+  api_key_required = true
+  http_method      = "GET"
 }
 
 resource "aws_api_gateway_method" "post" {
-  resource_id   = aws_api_gateway_resource.events.id
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  authorization = "NONE" # TODO: API key
-  http_method   = "POST"
+  resource_id      = aws_api_gateway_resource.events.id
+  rest_api_id      = aws_api_gateway_rest_api.api.id
+  authorization    = "NONE"
+  api_key_required = true
+  http_method      = "POST"
 }
 
 resource "aws_api_gateway_integration" "list_recent_events" {

@@ -1,2 +1,3 @@
 region = "eu-west-1"
 atlas_org_id = "your MongoDB Atlas org ID"
+api_key = "my-api-key"
