@@ -49,6 +49,8 @@ const floorDate = (date) => {
 
 exports.handler = async ({ body }) => {
   const connection = await getDBConnection();
+
+  // TODO: validate body via API Gateway
   const { date: isoDateString, deviceID, eventType, value } = JSON.parse(body);
   const date = new Date(isoDateString);
 

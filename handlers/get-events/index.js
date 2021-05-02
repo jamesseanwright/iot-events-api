@@ -35,6 +35,7 @@ const createRes = (statusCode, body) => ({
   body: JSON.stringify(body),
 });
 
+// TODO: validate in API Gateway instead
 const validateParams = (queryParams) => {
   for (let param of ['deviceID', 'date', 'eventType']) {
     if (!queryParams[param]) {
