@@ -5,16 +5,21 @@ const { MONGODB_URI, MONGODB_USER, MONGODB_PASSWORD } = process.env;
 
 let conn;
 
+const createConnectionAuthOptions = () =>
+  MONGODB_USER && MONGODB_PASSWORD
+    ? {
+      user: MONGODB_USER,
+      password: MONGODB_PASSWORD,
+    }
+    : {};
+
 // TODO: lambda layer
 const getDBConnection = async () => {
   if (!conn) {
     conn = await MongoClient.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      auth: {
-        user: MONGODB_USER,
-        password: MONGODB_PASSWORD,
-      },
+      ...createConnectionAuthOptions(),
     });
   }
 
@@ -31,9 +36,21 @@ const createRes = (statusCode, message) => ({
   body: JSON.stringify({ message }),
 });
 
+const floorDate = (date) => {
+  const floored = new Date(date);
+
+  floored.setUTCHours(0);
+  floored.setUTCMinutes(0);
+  floored.setUTCSeconds(0);
+  floored.setUTCMilliseconds(0);
+
+  return floored;
+};
+
 exports.handler = async ({ body }) => {
   const connection = await getDBConnection();
-  const { date, deviceID, eventType } = JSON.parse(body);
+  const { date: isoDateString, deviceID, eventType, value } = JSON.parse(body);
+  const date = new Date(isoDateString);
 
   try {
     const {
@@ -41,11 +58,27 @@ exports.handler = async ({ body }) => {
     } = await connection
       .db('events')
       .collection('events')
-      .insertOne({
-        date: new Date(date),
-        deviceID,
-        eventType,
-      });
+      .updateOne(
+        {
+          deviceID,
+          date: floorDate(date),
+          eventType,
+        },
+        {
+          $push: {
+            events: {
+              $each: [{
+                date,
+                value,
+              }],
+              $position: 0,
+            },
+          },
+        },
+        {
+          upsert: true,
+        },
+      );
 
     return ok
       ? createRes(201, 'Created event')
