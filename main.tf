@@ -34,6 +34,7 @@ provider "random" {}
 
 module "vpc" {
   source = "./tf-modules/vpc"
+  region = var.region
 }
 
 module "atlas" {

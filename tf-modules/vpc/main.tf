@@ -9,7 +9,7 @@ resource "aws_vpc" "iot_events" {
 resource "aws_subnet" "subnet_a" {
   vpc_id = aws_vpc.iot_events.id
   cidr_block = "10.0.0.0/24"
-  availability_zone = "eu-west-1a" # TODO: compute from region
+  availability_zone = "${var.region}a"
 
   tags = {
     Name = "iot-events-subnet-a"
@@ -19,7 +19,7 @@ resource "aws_subnet" "subnet_a" {
 resource "aws_subnet" "subnet_b" {
   vpc_id = aws_vpc.iot_events.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "eu-west-1b"
+  availability_zone = "${var.region}b"
 
   tags = {
     Name = "iot-events-subnet-b"
@@ -29,7 +29,7 @@ resource "aws_subnet" "subnet_b" {
 resource "aws_subnet" "subnet_c" {
   vpc_id = aws_vpc.iot_events.id
   cidr_block = "10.0.2.0/24"
-  availability_zone = "eu-west-1c"
+  availability_zone = "${var.region}c"
 
   tags = {
     Name = "iot-events-subnet-c"
