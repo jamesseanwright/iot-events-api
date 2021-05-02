@@ -70,3 +70,5 @@ resource "mongodbatlas_privatelink_endpoint_service" "iot_vpc_endpoint_svc" {
   private_link_id     = mongodbatlas_privatelink_endpoint.private_endpoint.private_link_id
   endpoint_service_id = aws_vpc_endpoint.iot_vpc_endpoint.id
 }
+
+# TODO: add unique index against device ID, date, and event type fields
