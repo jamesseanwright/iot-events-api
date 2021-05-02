@@ -11,13 +11,13 @@ Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https:
 #### Adding a New Event
 
 ```sh
-$ curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" -d '{ "body": "{ \"date\": \"'$(date --iso-8601=seconds --utc)'\", \"deviceID\": \"8f188304-e7b3-4a16-a243-b9470468478a\", \"eventType\": \"ping\" }" }'
+$ curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" -d '{ "body": "{ \"date\": \"'$(date --iso-8601=seconds --utc)'\", \"deviceID\": \"8f188304-e7b3-4a16-a243-b9470468478a\", \"eventType\": \"temp_celcius\", \"value\": 4 }" }'
 ```
 
-#### Listing the Ten Most Recent Events
+#### Retrieving events for a given device ID by event type and date
 
 ```sh
-$ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+$ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{ "queryStringParameters": { "deviceID": "8f188304-e7b3-4a16-a243-b9470468478a", "date": "'$(date --iso-8601=date)'", "eventType": "temp_celcius" } }'
 ```
 
 ## Deploying to AWS and MongoDB Atlas (WIP)
@@ -29,3 +29,7 @@ $ aws ecr get-login-password --region <AWS region> | docker login --username AWS
 ```
 
 before running `terraform apply`
+
+## Schema Design
+
+TODO
