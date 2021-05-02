@@ -8,9 +8,9 @@ let conn;
 const createConnectionAuthOptions = () =>
   MONGODB_USER && MONGODB_PASSWORD
     ? {
-      user: MONGODB_USER,
-      password: MONGODB_PASSWORD,
-    }
+        user: MONGODB_USER,
+        password: MONGODB_PASSWORD,
+      }
     : {};
 
 // TODO: lambda layer
@@ -35,7 +35,7 @@ const createRes = (statusCode, body) => ({
   body: JSON.stringify(body),
 });
 
-const validateParams = queryParams => {
+const validateParams = (queryParams) => {
   for (let param of ['deviceID', 'date', 'eventType']) {
     if (!queryParams[param]) {
       throw new Error(`${param} is missing from query params`);

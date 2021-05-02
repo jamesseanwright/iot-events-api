@@ -57,10 +57,10 @@ module "add_event_lambda" {
   db_password          = module.atlas.password
 }
 
-module "list_recent_events_lambda" {
+module "get_events_lambda" {
   source               = "./tf-modules/ecr-lambda"
-  repo_name            = "list-recent-events"
-  function_name        = "list_recent_events"
+  repo_name            = "get-events"
+  function_name        = "get_events"
   source_arn           = module.rest_api.execution_arn
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.security_group_id
@@ -70,8 +70,8 @@ module "list_recent_events_lambda" {
 }
 
 module "rest_api" {
-  source                               = "./tf-modules/rest-api"
-  api_key                              = var.api_key
-  list_recent_events_lambda_invoke_arn = module.list_recent_events_lambda.invoke_arn
-  add_event_lambda_invoke_arn          = module.add_event_lambda.invoke_arn
+  source                       = "./tf-modules/rest-api"
+  api_key                      = var.api_key
+  get_events_lambda_invoke_arn = module.get_events_lambda.invoke_arn
+  add_event_lambda_invoke_arn  = module.add_event_lambda.invoke_arn
 }

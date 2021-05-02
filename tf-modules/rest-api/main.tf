@@ -12,6 +12,13 @@ resource "aws_api_gateway_deployment" "deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_api_gateway_method.get,
+    aws_api_gateway_method.post,
+    aws_api_gateway_integration.get_events,
+    aws_api_gateway_integration.add_event
+  ]
 }
 
 resource "aws_api_gateway_account" "iot_events" {}
@@ -54,6 +61,11 @@ resource "aws_api_gateway_method" "get" {
   authorization    = "NONE"
   api_key_required = true
   http_method      = "GET"
+  request_parameters = {
+    "method.request.querystring.deviceID" = true
+    "method.request.querystring.date" = true
+    "method.request.querystring.eventType" = true
+  }
 }
 
 resource "aws_api_gateway_method" "post" {
@@ -64,13 +76,13 @@ resource "aws_api_gateway_method" "post" {
   http_method      = "POST"
 }
 
-resource "aws_api_gateway_integration" "list_recent_events" {
+resource "aws_api_gateway_integration" "get_events" {
   resource_id             = aws_api_gateway_resource.events.id
   rest_api_id             = aws_api_gateway_rest_api.api.id
   http_method             = aws_api_gateway_method.get.http_method
   integration_http_method = "POST" # The method with which the lambda invocation endpoint is hit
   type                    = "AWS_PROXY"
-  uri                     = var.list_recent_events_lambda_invoke_arn
+  uri                     = var.get_events_lambda_invoke_arn
 }
 
 resource "aws_api_gateway_integration" "add_event" {

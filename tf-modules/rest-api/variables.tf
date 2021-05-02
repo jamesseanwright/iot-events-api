@@ -3,8 +3,8 @@ variable "api_key" {
   type        = string
 }
 
-variable "list_recent_events_lambda_invoke_arn" {
-  description = "The invoke ARN that the respective API Gateway integration will use to call the list recent events lambda"
+variable "get_events_lambda_invoke_arn" {
+  description = "The invoke ARN that the respective API Gateway integration will use to call the get events lambda"
   type        = string
 }
 

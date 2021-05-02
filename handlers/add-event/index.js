@@ -8,9 +8,9 @@ let conn;
 const createConnectionAuthOptions = () =>
   MONGODB_USER && MONGODB_PASSWORD
     ? {
-      user: MONGODB_USER,
-      password: MONGODB_PASSWORD,
-    }
+        user: MONGODB_USER,
+        password: MONGODB_PASSWORD,
+      }
     : {};
 
 // TODO: lambda layer
@@ -67,10 +67,12 @@ exports.handler = async ({ body }) => {
         {
           $push: {
             events: {
-              $each: [{
-                date,
-                value,
-              }],
+              $each: [
+                {
+                  date,
+                  value,
+                },
+              ],
               $position: 0,
             },
           },
