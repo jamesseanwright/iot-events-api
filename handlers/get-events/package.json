@@ -1,7 +1,7 @@
 {
-  "name": "list-recent-events",
+  "name": "get-events",
   "version": "0.0.1",
-  "description": "Lambda for retrieving recent events from the MongoDB events collection",
+  "description": "Lambda for retrieving events from the MongoDB events collection, grouped by device ID, date, and event type",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
