@@ -63,6 +63,9 @@ exports.handler = async ({ queryStringParameters }) => {
       .collection('events')
       .aggregate([
         {
+          $limit: 1,
+        },
+        {
           $match: {
             deviceID,
             date: new Date(date),
