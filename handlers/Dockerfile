@@ -8,5 +8,4 @@ COPY ./${handler} /var/task/handler
 WORKDIR /var/task
 RUN ["npm", "i", "--production"]
 
-ENV LAMBDA_TASK_ROOT=/var/task/handler
-CMD ["index.handler"]
+CMD ["handler/index.handler"]
