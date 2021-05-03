@@ -36,22 +36,26 @@ resource "aws_subnet" "subnet_c" {
   }
 }
 
-# TODO: split into respective security groups for
-# lambdas (egress) and VPC endpoint (ingress)
-resource "aws_security_group" "security_group" {
+resource "aws_security_group" "atlas_resource" {
   vpc_id = aws_vpc.iot_events.id
-  name = "iot-events-default-security-group"
-  description = "The default security group for the IoT events VPC"
+  name = "iot-events-atlas-resource-security-group"
+  description = "The security group for resources that need to communicate with the Atlas private endpoint"
 
-  ingress {
+  egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
+}
 
-  egress {
+resource "aws_security_group" "atlas_endpoint" {
+  vpc_id = aws_vpc.iot_events.id
+  name = "iot-events-atlas-endpoint-security-group"
+  description = "The security group for the Atlas private endpoint, allowing it to communicate with VPC resources"
+
+  ingress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"

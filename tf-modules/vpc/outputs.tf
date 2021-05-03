@@ -12,7 +12,12 @@ output "subnet_ids" {
   description = "The IDs of our IoT events subnets"
 }
 
-output "security_group_id" {
-  value = aws_security_group.security_group.id
-  description = "The ID of our IoT events default security group"
+output "atlas_resource_security_group_id" {
+  value = aws_security_group.atlas_resource.id
+  description = "The ID of the security group for resources that need to communicate with the Atlas private endpoint"
+}
+
+output "atlas_endpoint_security_group_id" {
+  value = aws_security_group.atlas_endpoint.id
+  description = "The ID of the security group for the Atlas private endpoint, allowing it to communicate with VPC resources"
 }

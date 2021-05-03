@@ -43,7 +43,7 @@ module "atlas" {
   atlas_org_id      = var.atlas_org_id
   vpc_id            = module.vpc.id
   subnet_ids        = module.vpc.subnet_ids
-  security_group_id = module.vpc.security_group_id
+  security_group_id = module.vpc.atlas_endpoint_security_group_id
 }
 
 module "add_event_lambda" {
@@ -51,7 +51,7 @@ module "add_event_lambda" {
   name                 = "add-event"
   source_arn           = module.rest_api.execution_arn
   subnet_ids           = module.vpc.subnet_ids
-  security_group_id    = module.vpc.security_group_id
+  security_group_id    = module.vpc.atlas_resource_security_group_id
   db_connection_string = module.atlas.connection_string
   db_username          = module.atlas.username
   db_password          = module.atlas.password
@@ -62,7 +62,7 @@ module "get_events_lambda" {
   name                 = "get-events"
   source_arn           = module.rest_api.execution_arn
   subnet_ids           = module.vpc.subnet_ids
-  security_group_id    = module.vpc.security_group_id
+  security_group_id    = module.vpc.atlas_resource_security_group_id
   db_connection_string = module.atlas.connection_string
   db_username          = module.atlas.username
   db_password          = module.atlas.password
