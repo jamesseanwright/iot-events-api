@@ -45,8 +45,7 @@ resource "aws_security_group" "atlas_resource" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks      = [aws_vpc.iot_events.cidr_block]
   }
 }
 
@@ -59,7 +58,6 @@ resource "aws_security_group" "atlas_endpoint" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks      = [aws_vpc.iot_events.cidr_block]
   }
 }
