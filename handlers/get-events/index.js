@@ -4,8 +4,6 @@ const { getDBConnection, createRes } = require('../common');
 
 exports.handler = async ({ queryStringParameters }) => {
   const connection = await getDBConnection();
-
-  // TODO: validate in API Gateway
   const { deviceID, date, eventType } = queryStringParameters;
 
   try {

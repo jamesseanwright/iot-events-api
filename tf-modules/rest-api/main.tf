@@ -2,6 +2,52 @@ resource "aws_api_gateway_rest_api" "api" {
   name = "iot-events"
 }
 
+resource "aws_api_gateway_model" "event" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  name = "event"
+  description = "Event information sent from a device"
+  content_type = "application/json"
+
+  schema = jsonencode({
+    "$schema" = "http://json-schema.org/draft-04/schema#"
+    type = "object"
+
+    properties = {
+      deviceID = {
+        type = "string"
+        format = "uuid"
+      }
+
+      eventType = {
+        type = "string"
+      }
+
+      date = {
+        type = "string"
+        format = "date"
+      }
+
+      value = {} # can be anything
+    }
+
+    required = ["deviceID", "eventType", "date"]
+  })
+}
+
+resource "aws_api_gateway_request_validator" "get_events" {
+  name = "get-events"
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  validate_request_body = false
+  validate_request_parameters = true
+}
+
+resource "aws_api_gateway_request_validator" "add_event" {
+  name = "add-event"
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  validate_request_body = true
+  validate_request_parameters = false
+}
+
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
@@ -61,6 +107,7 @@ resource "aws_api_gateway_method" "get" {
   authorization    = "NONE"
   api_key_required = true
   http_method      = "GET"
+  request_validator_id = aws_api_gateway_request_validator.get_events.id
   request_parameters = {
     "method.request.querystring.deviceID" = true
     "method.request.querystring.date" = true
@@ -74,6 +121,10 @@ resource "aws_api_gateway_method" "post" {
   authorization    = "NONE"
   api_key_required = true
   http_method      = "POST"
+  request_validator_id = aws_api_gateway_request_validator.add_event.id
+  request_models = {
+    "application/json" = aws_api_gateway_model.event.name
+  }
 }
 
 resource "aws_api_gateway_integration" "get_events" {
