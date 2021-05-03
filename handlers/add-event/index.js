@@ -1,40 +1,6 @@
 'use strict';
 
-const { MongoClient } = require('mongodb');
-const { MONGODB_URI, MONGODB_USER, MONGODB_PASSWORD } = process.env;
-
-let conn;
-
-const createConnectionAuthOptions = () =>
-  MONGODB_USER && MONGODB_PASSWORD
-    ? {
-        user: MONGODB_USER,
-        password: MONGODB_PASSWORD,
-      }
-    : {};
-
-// TODO: lambda layer
-const getDBConnection = async () => {
-  if (!conn) {
-    conn = await MongoClient.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      ...createConnectionAuthOptions(),
-    });
-  }
-
-  return conn;
-};
-
-// TODO: lambda layer
-const createRes = (statusCode, message) => ({
-  statusCode,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  isBase64Encoded: false,
-  body: JSON.stringify({ message }),
-});
+const { getDBConnection, createRes } = require('../common');
 
 const floorDate = (date) => {
   const floored = new Date(date);
@@ -85,9 +51,9 @@ exports.handler = async ({ body }) => {
       );
 
     return ok
-      ? createRes(201, 'Created event')
-      : createRes(500, 'Unable to create event');
+      ? createRes(201, { message: 'Created event' })
+      : createRes(500, { message: 'Unable to create event' });
   } catch ({ message }) {
-    return createRes(500, message);
+    return createRes(500, { message });
   }
 };

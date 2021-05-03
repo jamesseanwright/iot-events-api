@@ -1,7 +1,7 @@
 {
-  "name": "get-events",
+  "name": "handlers",
   "version": "0.0.1",
-  "description": "Lambda for retrieving events from the MongoDB events collection, grouped by device ID, date, and event type",
+  "description": "Lambda functions for storing and retrieving IoT events",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
