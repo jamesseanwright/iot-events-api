@@ -2,26 +2,10 @@
 
 const { getDBConnection, createRes } = require('../common');
 
-// TODO: validate in API Gateway instead
-const validateParams = (queryParams) => {
-  for (let param of ['deviceID', 'date', 'eventType']) {
-    if (!queryParams[param]) {
-      throw new Error(`${param} is missing from query params`);
-    }
-  }
-};
-
 exports.handler = async ({ queryStringParameters }) => {
   const connection = await getDBConnection();
 
-  try {
-    validateParams(queryStringParameters);
-  } catch ({ message }) {
-    return createRes(400, {
-      message,
-    });
-  }
-
+  // TODO: validate in API Gateway
   const { deviceID, date, eventType } = queryStringParameters;
 
   try {
