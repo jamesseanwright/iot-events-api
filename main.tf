@@ -48,7 +48,7 @@ module "atlas" {
 
 module "add_event_lambda" {
   source               = "./tf-modules/ecr-lambda"
-  name            = "add-event"
+  name                 = "add-event"
   source_arn           = module.rest_api.execution_arn
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.security_group_id
@@ -59,7 +59,7 @@ module "add_event_lambda" {
 
 module "get_events_lambda" {
   source               = "./tf-modules/ecr-lambda"
-  name            = "get-events"
+  name                 = "get-events"
   source_arn           = module.rest_api.execution_arn
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.security_group_id
