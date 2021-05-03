@@ -1,5 +1,9 @@
+locals {
+  function_name = replace(var.name, "-", "_")
+}
+
 resource "aws_iam_role" "lambda_role" {
-  name = "${var.function_name}_iam_role"
+  name = "${local.function_name}_iam_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -13,7 +17,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   inline_policy {
-    name = "${var.function_name}_network_config_role"
+    name = "${local.function_name}_network_config_role"
 
     policy = jsonencode({
       Version = "2012-10-17"
@@ -33,13 +37,13 @@ resource "aws_iam_role" "lambda_role" {
 }
 
 resource "aws_ecr_repository" "lambda_repo" {
-  name = var.repo_name
+  name = var.name
 
   # TODO: these provisioners will only run when the
   # repo is created for the first time. Find a better
   # way to build and push containers as code changes.
   provisioner "local-exec" {
-    command = "docker build -t ${self.repository_url} handlers/${var.repo_name}"
+    command = "docker build -t ${self.repository_url} --build-arg handler=${var.name} handlers"
   }
 
   provisioner "local-exec" {
@@ -48,7 +52,7 @@ resource "aws_ecr_repository" "lambda_repo" {
 }
 
 resource "aws_lambda_function" "lambda_function" {
-  function_name = var.function_name
+  function_name = local.function_name
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.lambda_repo.repository_url}:latest"
   role          = aws_iam_role.lambda_role.arn
