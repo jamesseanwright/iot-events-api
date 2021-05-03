@@ -10,6 +10,7 @@ resource "aws_api_gateway_model" "event" {
 
   schema = jsonencode({
     "$schema" = "http://json-schema.org/draft-04/schema#"
+    title = "Event"
     type = "object"
 
     properties = {
