@@ -20,15 +20,37 @@ $ curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" 
 $ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{ "queryStringParameters": { "deviceID": "8f188304-e7b3-4a16-a243-b9470468478a", "date": "'$(date --iso-8601=date)'", "eventType": "temp_celcius" } }'
 ```
 
-## Deploying to AWS and MongoDB Atlas (WIP)
+## Deploying to AWS and MongoDB Atlas
 
-- Will need to run:
+The infrastructure of this project is managed with [Terraform](https://www.terraform.io/); make sure you have this installed before proceeding.
+
+Firstly, you'll need to ensure that you have [valid AWS credentials configured on your machine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication); I recommend using [`aws configure`](https://docs.aws.amazon.com/cli/latest/reference/configure/) to write your key ID and secret key value to the AWS CLI's shared credentials file.
+
+Next, [create an Atlas API key](https://docs.atlas.mongodb.com/configure-api-access/#programmatic-api-keys) with the _Organization Project Creator_ scope, which must be present on your system as environment variables:
+
+```sh
+$ export MONGODB_ATLAS_PUBLIC_KEY=<Atlas public key> MONGODB_ATLAS_PRIVATE_KEY=<Atlas private key>
+```
+
+There are a handful of root module variables to which values must be assigned; this can be achieved by renaming `terraform.tfvars.example` to `terraform.tfvars` (i.e. `mv terraform.tfvars.example terraform.tfvars`) and populating it accordingly:
+
+| Variable name  | Description |
+|----------------|-------------|
+| `region`       | The AWS region to which the lambdas and AWS-backed Atlas cluster are deployed e.g. `eu-west-1` |
+| `atlas_org_id` | The ID of the organisation under which the Atlas project will be created |
+| `rest_api_key` | The key that consumers need to provide when calling our REST API i.e. this value must be present in the `x-api-key` HTTP header when requesting a resource |
+
+The final prerequisite is to authenticate Docker against AWS ECR, to which our Lambda container images will be pushed:
 
 ```sh
 $ aws ecr get-login-password --region <AWS region> | docker login --username AWS --password-stdin <AWS account ID>.dkr.ecr.<AWS region>.amazonaws.com
 ```
 
-before running `terraform apply`
+You can now deploy the service with `terraform apply`.
+
+### Example Requests
+
+TODO
 
 ## Schema Design
 
