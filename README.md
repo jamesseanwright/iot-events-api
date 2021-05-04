@@ -62,6 +62,10 @@ $ curl -XPOST "<API URL in Terraform outputs>" -H "Content-Type: application/jso
 $ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date --iso-8601=date --utc)" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>"
 ```
 
+## Architecture Overview
+
+TODO
+
 ## Schema Design
 
 TODO
