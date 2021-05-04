@@ -8,7 +8,7 @@ variable "atlas_org_id" {
   type        = string
 }
 
-variable "api_key" {
+variable "rest_api_key" {
   description = "The API key with which the REST endpoints must be called"
   type        = string
 }

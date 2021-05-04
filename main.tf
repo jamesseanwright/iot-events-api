@@ -70,7 +70,7 @@ module "get_events_lambda" {
 
 module "rest_api" {
   source                       = "./tf-modules/rest-api"
-  api_key                      = var.api_key
+  api_key                      = var.rest_api_key
   get_events_lambda_invoke_arn = module.get_events_lambda.invoke_arn
   add_event_lambda_invoke_arn  = module.add_event_lambda.invoke_arn
 }
