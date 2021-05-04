@@ -71,4 +71,6 @@ resource "mongodbatlas_privatelink_endpoint_service" "iot_vpc_endpoint_svc" {
   endpoint_service_id = aws_vpc_endpoint.iot_vpc_endpoint.id
 }
 
-# TODO: add unique index against device ID, date, and event type fields
+# TODO: add unique index against device ID, date, and event type fields.
+# Sadly, there's no Terraform resource for creating indexes against Atlas
+# clusters, so we'd have to do this by calling the API directly.
