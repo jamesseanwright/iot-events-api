@@ -17,7 +17,7 @@ $ curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" 
 #### Retrieving events for a given device ID by event type and date
 
 ```sh
-$ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{ "queryStringParameters": { "deviceID": "8f188304-e7b3-4a16-a243-b9470468478a", "date": "'$(date --iso-8601=date)'", "eventType": "temp_celcius" } }'
+$ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{ "queryStringParameters": { "deviceID": "8f188304-e7b3-4a16-a243-b9470468478a", "date": "'$(date --iso-8601=date --utc)'", "eventType": "temp_celcius" } }'
 ```
 
 ## Deploying to AWS and MongoDB Atlas
@@ -50,7 +50,17 @@ You can now deploy the service with `terraform apply`. Upon successful deploymen
 
 ### Example Requests
 
-TODO
+#### Adding a New Event
+
+```sh
+$ curl -XPOST "<API URL in Terraform outputs>" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>" -d '{"date":"'$(date --iso-8601=seconds --utc)'","deviceID":"8f188304-e7b3-4a16-a243-b9470468478a","eventType":"temp_celcius","value":3}'
+```
+
+#### Retrieving events for a given device ID by event type and date
+
+```sh
+$ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date --iso-8601=date --utc)" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>"
+```
 
 ## Schema Design
 
