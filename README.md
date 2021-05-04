@@ -46,7 +46,7 @@ The final prerequisite is to authenticate Docker against AWS ECR, to which our L
 $ aws ecr get-login-password --region <AWS region> | docker login --username AWS --password-stdin <AWS account ID>.dkr.ecr.<AWS region>.amazonaws.com
 ```
 
-You can now deploy the service with `terraform apply`.
+You can now deploy the service with `terraform apply`. Upon successful deployment, the full API URL will be displayed as an output. **Note that** it can take ~7-10 minutes to create the Atlas cluster.
 
 ### Example Requests
 
