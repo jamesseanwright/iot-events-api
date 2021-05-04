@@ -4,7 +4,7 @@ A REST API for storing and retrieving IoT device events, built with Terraform, A
 
 ## Running Locally
 
-Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) are present on your system. You can then run `docker-compose up`.
+Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) are present on your system. You can then run `docker-compose up`. **Note that** you'll need to rebuild with `docker-compose build` when making changes to the function code.
 
 ### Example Requests
 
