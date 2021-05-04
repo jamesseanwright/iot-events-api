@@ -64,7 +64,7 @@ $ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9
 
 ## Architecture
 
-![Architecture diagram][https://raw.githubusercontent.com/jamesseanwright/terraform-lambda-atlas/master/images/architecture.png]
+![Architecture diagram](images/architecture.png)
 
 ## Schema Design
 
