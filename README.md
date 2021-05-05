@@ -66,10 +66,12 @@ $ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9
 
 ![Architecture diagram](images/architecture.png)
 
-## Schema Design
+## Data Schema
 
-TODO
+https://www.mongodb.com/blog/post/building-with-patterns-the-bucket-pattern
 
 ## Next Steps
 
-TODO
+* The Docker images for the Lambda functions are only pushed to ECR when the infrastructure is first provisioned, given the use of the `local-exec` provisioner within the `aws_ecr_repository.lambda_repo` resource. Perhaps it's possible to push the containers when they're updated with the [`kreuzwerker/docker` provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest) and version-tagged images, although we'd still have to manage the latter concern outside of Terraform
+
+* Given our data schema is built upon bucketing, we should create a unique index for the events collection against the date, device ID, and event type fields, to ensure that duplicate buckets can't be created. Unfortunately, [the `mongodbatlas` provider doesn't include a resource for creating indexes](https://github.com/mongodb/terraform-provider-mongodbatlas/issues/308), so we'd have to call the Atlas API directly
