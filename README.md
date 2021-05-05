@@ -68,7 +68,20 @@ $ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9
 
 ## Data Schema
 
-https://www.mongodb.com/blog/post/building-with-patterns-the-bucket-pattern
+The schema of our MongoDB events collection follows the [bucket pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-bucket-pattern); by placing individual events within an array field held by a document representing a particular device ID, date range, and event type combination, we can drastically reduce the number of documents the database engine has to scan on retrieval and shrink any indexes against the collection.
+
+```ts
+{
+  _id: ObjectId;
+  date: Date; // the date for the given day e.g. 2021-05-05T00:00:00.000+0000
+  deviceID: string;
+  eventType: string;
+  events: {
+    date: Date; // specific event date e.g. 2021-05-05T17:19:35.000+0000
+    value: any;
+  }[]
+}
+```
 
 ## Next Steps
 
