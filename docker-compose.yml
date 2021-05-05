@@ -27,5 +27,3 @@ services:
     image: mongo:4.4.5
     environment:
       MONGO_INITDB_DATABASE: events
-    ports:
-      - 27017:27017
