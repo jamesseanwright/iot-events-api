@@ -34,10 +34,10 @@ $ export MONGODB_ATLAS_PUBLIC_KEY=<Atlas public key> MONGODB_ATLAS_PRIVATE_KEY=<
 
 There are a handful of root module variables to which values must be assigned; this can be achieved by renaming `terraform.tfvars.example` to `terraform.tfvars` (i.e. `mv terraform.tfvars.example terraform.tfvars`) and populating it accordingly:
 
-| Variable name  | Description |
-|----------------|-------------|
-| `region`       | The AWS region to which the lambdas and AWS-backed Atlas cluster are deployed e.g. `eu-west-1` |
-| `atlas_org_id` | The ID of the organisation under which the Atlas project will be created |
+| Variable name  | Description                                                                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `region`       | The AWS region to which the lambdas and AWS-backed Atlas cluster are deployed e.g. `eu-west-1`                                                             |
+| `atlas_org_id` | The ID of the organisation under which the Atlas project will be created                                                                                   |
 | `rest_api_key` | The key that consumers need to provide when calling our REST API i.e. this value must be present in the `x-api-key` HTTP header when requesting a resource |
 
 The final prerequisite is to authenticate Docker against AWS ECR, to which our Lambda container images will be pushed:
@@ -79,12 +79,13 @@ The schema of our MongoDB events collection follows the [bucket pattern](https:/
   events: {
     date: Date; // specific event date e.g. 2021-05-05T17:19:35.000+0000
     value: any;
-  }[]
+  }
+  [];
 }
 ```
 
 ## Next Steps
 
-* The Docker images for the Lambda functions are only pushed to ECR when the infrastructure is first provisioned, given the use of the `local-exec` provisioner within the `aws_ecr_repository.lambda_repo` resource. Perhaps it's possible to push the containers when they're updated with the [`kreuzwerker/docker` provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest) and version-tagged images, although we'd still have to manage the latter concern outside of Terraform
+- The Docker images for the Lambda functions are only pushed to ECR when the infrastructure is first provisioned, given the use of the `local-exec` provisioner within the `aws_ecr_repository.lambda_repo` resource. Perhaps it's possible to push the containers when they're updated with the [`kreuzwerker/docker` provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest) and version-tagged images, although we'd still have to manage the latter concern outside of Terraform
 
-* Given our data schema is built upon bucketing, we should create a unique index for the events collection against the date, device ID, and event type fields, to ensure that duplicate buckets can't be created. Unfortunately, [the `mongodbatlas` provider doesn't include a resource for creating indexes](https://github.com/mongodb/terraform-provider-mongodbatlas/issues/308), so we'd have to call the Atlas API directly
+- Given our data schema is built upon bucketing, we should create a unique index for the events collection against the date, device ID, and event type fields, to ensure that duplicate buckets can't be created. Unfortunately, [the `mongodbatlas` provider doesn't include a resource for creating indexes](https://github.com/mongodb/terraform-provider-mongodbatlas/issues/308), so we'd have to call the Atlas API directly
