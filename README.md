@@ -38,7 +38,7 @@ There are a handful of root module variables to which values must be assigned; t
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `region`       | The AWS region to which the lambdas and AWS-backed Atlas cluster are deployed e.g. `eu-west-1`                                                             |
 | `atlas_org_id` | The ID of the organisation under which the Atlas project will be created                                                                                   |
-| `rest_api_key` | The key that consumers need to provide when calling our REST API i.e. this value must be present in the `x-api-key` HTTP header when requesting a resource |
+| `rest_api_key` | The key that consumers will need to provide when calling our REST API i.e. this value must be present in the `x-api-key` HTTP header when requesting a resource |
 
 The final prerequisite is to authenticate Docker against AWS ECR, to which our Lambda container images will be pushed:
 
