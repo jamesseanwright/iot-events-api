@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamesseanwright/terraform-lambda-atlas.git"
+    "url": "git+https://github.com/jamesseanwright/iot-events-api.git"
   },
   "keywords": [],
   "author": "",

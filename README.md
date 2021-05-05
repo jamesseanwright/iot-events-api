@@ -1,4 +1,4 @@
-# Terraform Lambda Atlas
+# IoT Events API
 
 A REST API for storing and retrieving IoT device events, built with Terraform, AWS Lambda, and MongoDB Atlas.
 
