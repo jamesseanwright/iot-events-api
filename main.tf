@@ -24,6 +24,8 @@ provider "aws" {
   region  = var.region
 }
 
+# TODO: lift into Atlas module to avoid duplicate MongoDB
+# provider config in terraform config block
 provider "mongodbatlas" {
   # The public and private keys are configured via the
   # MONGODB_ATLAS_PUBLIC_KEY and MONGODB_ATLAS_PRIVATE_KEY
