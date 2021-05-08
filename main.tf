@@ -4,16 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.37.0"
     }
-
-    mongodbatlas = {
-      source  = "mongodb/mongodbatlas"
-      version = "~> 0.9.0"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.1.0"
-    }
   }
 
   required_version = "~> 0.15.0"
@@ -23,16 +13,6 @@ provider "aws" {
   profile = "default"
   region  = var.region
 }
-
-# TODO: lift into Atlas module to avoid duplicate MongoDB
-# provider config in terraform config block
-provider "mongodbatlas" {
-  # The public and private keys are configured via the
-  # MONGODB_ATLAS_PUBLIC_KEY and MONGODB_ATLAS_PRIVATE_KEY
-  # environment variables respectively
-}
-
-provider "random" {}
 
 module "vpc" {
   source = "./tf-modules/vpc"
@@ -48,10 +28,45 @@ module "atlas" {
   security_group_id = module.vpc.atlas_endpoint_security_group_id
 }
 
+resource "aws_iam_role" "lambda_role" {
+  name = "events_lambda_iam_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+      Effect = "Allow"
+    }]
+  })
+
+  inline_policy {
+    name = "events_lambda_network_config_role"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Action = [
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:CreateNetworkInterface",
+          "ec2:AttachNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeInstances"
+        ]
+        Resource = "*"
+        Effect   = "Allow"
+      }]
+    })
+  }
+}
+
 module "add_event_lambda" {
   source               = "./tf-modules/ecr-lambda"
   name                 = "add-event"
   source_arn           = module.rest_api.execution_arn
+  role_arn             = aws_iam_role.lambda_role.arn
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.atlas_resource_security_group_id
   db_connection_string = module.atlas.connection_string
@@ -63,6 +78,7 @@ module "get_events_lambda" {
   source               = "./tf-modules/ecr-lambda"
   name                 = "get-events"
   source_arn           = module.rest_api.execution_arn
+  role_arn             = aws_iam_role.lambda_role.arn
   subnet_ids           = module.vpc.subnet_ids
   security_group_id    = module.vpc.atlas_resource_security_group_id
   db_connection_string = module.atlas.connection_string

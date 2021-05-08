@@ -19,6 +19,6 @@ variable "subnet_ids" {
 }
 
 variable "security_group_id" {
-  description = "The ID of our IoT events default security group"
+  description = "The ID of the Atlas endpoint security group"
   type        = string
 }

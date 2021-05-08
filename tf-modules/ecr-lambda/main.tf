@@ -2,40 +2,6 @@ locals {
   function_name = replace(var.name, "-", "_")
 }
 
-resource "aws_iam_role" "lambda_role" {
-  name = "${local.function_name}_iam_role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole",
-      Principal = {
-        Service = "lambda.amazonaws.com"
-      }
-      Effect = "Allow"
-    }]
-  })
-
-  inline_policy {
-    name = "${local.function_name}_network_config_role"
-
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [{
-        Action = [
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:CreateNetworkInterface",
-          "ec2:AttachNetworkInterface",
-          "ec2:DeleteNetworkInterface",
-          "ec2:DescribeInstances"
-        ]
-        Resource = "*"
-        Effect = "Allow"
-      }]
-    })
-  }
-}
-
 resource "aws_ecr_repository" "lambda_repo" {
   name = var.name
 
@@ -55,7 +21,7 @@ resource "aws_lambda_function" "lambda_function" {
   function_name = local.function_name
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.lambda_repo.repository_url}:latest"
-  role          = aws_iam_role.lambda_role.arn
+  role          = var.role_arn
 
   environment {
     variables = {

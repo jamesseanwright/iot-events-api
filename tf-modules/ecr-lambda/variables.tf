@@ -8,13 +8,18 @@ variable "source_arn" {
   type = string
 }
 
+variable "role_arn" {
+  description = "The ARN of the IAM role that the lambda will assume"
+  type = string
+}
+
 variable "subnet_ids" {
   description = "The VPC subnet IDs to which the lambda should attach"
   type = list(string)
 }
 
 variable "security_group_id" {
-  description = "The VPC default security group ID for the lambda"
+  description = "The ID of the resource security group"
   type = string
 }
 

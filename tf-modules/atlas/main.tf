@@ -2,6 +2,12 @@ terraform {
   required_providers {
     mongodbatlas = {
       source  = "mongodb/mongodbatlas"
+      version = "~> 0.9.0"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1.0"
     }
   }
 }
@@ -10,6 +16,9 @@ locals {
   database_username = "events-user"
 }
 
+# The public and private keys are configured via the
+# MONGODB_ATLAS_PUBLIC_KEY and MONGODB_ATLAS_PRIVATE_KEY
+# environment variables respectively
 resource "mongodbatlas_project" "iot_events" {
   name   = "iot-events"
   org_id = var.atlas_org_id
