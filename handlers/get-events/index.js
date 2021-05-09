@@ -19,7 +19,7 @@ exports.handler = async ({ queryStringParameters }) => {
           },
         },
         {
-          $limit: 1, // TODO: verify with execution plan
+          $limit: 1,
         },
         {
           $unwind: '$events',
