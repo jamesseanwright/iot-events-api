@@ -8,4 +8,4 @@ function buildBody(r) {
 }
 
 // `export function function (){}` isn't supported
-export default { buildBody }
+export default { buildBody };
