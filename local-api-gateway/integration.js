@@ -1,11 +1,23 @@
 'use strict';
 
-function buildBody(r) {
-  return JSON.stringify({
+function invoke(r) {
+  var payload = {
     body: r.requestText,
     queryStringParameters: r.args,
+  };
+
+  r.subrequest('/integration', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  }).then(function (res) {
+    try {
+      var integrationRes = JSON.parse(res.responseText);
+      r.return(integrationRes.statusCode, integrationRes.body);
+    } catch (e) {
+      r.return(500, e.message);
+    }
   });
 }
 
 // `export function function (){}` isn't supported
-export default { buildBody };
+export default { invoke };
