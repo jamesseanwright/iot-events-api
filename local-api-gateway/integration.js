@@ -12,6 +12,11 @@ function invoke(r) {
   }).then(function (res) {
     try {
       var integrationRes = JSON.parse(res.responseText);
+
+      for (var headerName in integrationRes.headers) {
+        r.headersOut[headerName] = integrationRes.headers[headerName];
+      }
+
       r.return(integrationRes.statusCode, integrationRes.body);
     } catch (e) {
       r.return(500, e.message);
