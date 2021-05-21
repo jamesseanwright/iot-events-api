@@ -11,13 +11,13 @@ Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https:
 #### Adding a New Event
 
 ```sh
-$ curl -XPOST "http://localhost:8080/events" -H "Content-Type: application/json" -d '{"date":"'$(date --iso-8601=seconds --utc)'","deviceID":"8f188304-e7b3-4a16-a243-b9470468478a","eventType":"temp_celcius","value":3}'
+$ curl -XPOST "http://localhost:8080/events" -H "Content-Type: application/json" -d '{"date":"'$(date -u +%FT%TZ)'","deviceID":"8f188304-e7b3-4a16-a243-b9470468478a","eventType":"temp_celcius","value":3}'
 ```
 
 #### Retrieving events for a given device ID by event type and date
 
 ```sh
-$ curl -XGET "http://localhost:8080/events?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date --iso-8601=date --utc)" -H "Content-Type: application/json"
+$ curl -XGET "http://localhost:8080/events?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date -u +%F)" -H "Content-Type: application/json"
 ```
 
 ## Deploying to AWS and MongoDB Atlas
@@ -53,13 +53,13 @@ You can now deploy the service with `terraform apply`. Upon successful deploymen
 #### Adding a New Event
 
 ```sh
-$ curl -XPOST "<API URL in Terraform outputs>" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>" -d '{"date":"'$(date --iso-8601=seconds --utc)'","deviceID":"8f188304-e7b3-4a16-a243-b9470468478a","eventType":"temp_celcius","value":3}'
+$ curl -XPOST "<API URL in Terraform outputs>" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>" -d '{"date":"'$(date -u +%FT%TZ)'","deviceID":"8f188304-e7b3-4a16-a243-b9470468478a","eventType":"temp_celcius","value":3}'
 ```
 
 #### Retrieving events for a given device ID by event type and date
 
 ```sh
-$ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date --iso-8601=date --utc)" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>"
+$ curl -XGET "<API URL in Terraform outputs>?deviceID=8f188304-e7b3-4a16-a243-b9470468478a&eventType=temp_celcius&date=$(date -u +%F)" -H "Content-Type: application/json" -H "x-api-key: <value provided to rest_api_key Terraform variable>"
 ```
 
 ## Architecture
