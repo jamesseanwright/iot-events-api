@@ -2,12 +2,12 @@ terraform {
   required_providers {
     mongodbatlas = {
       source  = "mongodb/mongodbatlas"
-      version = "~> 0.9.0"
+      version = "0.9.1"
     }
 
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.1.0"
+      version = "3.1.0"
     }
   }
 }
