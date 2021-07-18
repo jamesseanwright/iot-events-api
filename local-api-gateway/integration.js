@@ -24,5 +24,5 @@ function invoke(r) {
   });
 }
 
-// `export function function (){}` isn't supported
+// `export default function (){}` isn't supported
 export default { invoke };
